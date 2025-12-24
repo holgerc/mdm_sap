@@ -61,6 +61,23 @@ services:
       - mdm_network
     restart: unless-stopped
 
+  # Frontend UI
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: mdm_frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - mdm_network
+    restart: unless-stopped
+
   # PgAdmin (optional - for database management)
   pgadmin:
     image: dpage/pgadmin4:latest
