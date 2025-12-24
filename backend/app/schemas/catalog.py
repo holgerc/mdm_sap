@@ -54,7 +54,7 @@ class CatalogValueBase(BaseModel):
     sort_order: int = 0
     icon_class: Optional[str] = None
     color_hex: Optional[str] = None
-    metadata: Optional[dict] = None
+    extra_metadata: Optional[dict] = None
     valid_from: Optional[date] = None
     valid_to: Optional[date] = None
     is_default: bool = False
@@ -73,7 +73,7 @@ class CatalogValueUpdate(BaseModel):
     sort_order: Optional[int] = None
     icon_class: Optional[str] = None
     color_hex: Optional[str] = None
-    metadata: Optional[dict] = None
+    extra_metadata: Optional[dict] = None
     valid_from: Optional[date] = None
     valid_to: Optional[date] = None
     is_default: Optional[bool] = None
