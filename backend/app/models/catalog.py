@@ -44,7 +44,7 @@ class MDMCatalogValue(BaseModel):
     sort_order = Column(Integer, default=0)
     icon_class = Column(String(100), nullable=True)
     color_hex = Column(String(7), nullable=True)
-    metadata = Column(JSON, nullable=True)
+    extra_metadata = Column(JSON, nullable=True)
     valid_from = Column(Date, nullable=True)
     valid_to = Column(Date, nullable=True)
     is_default = Column(Boolean, default=False)
