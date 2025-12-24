@@ -18,7 +18,6 @@ export default function Attributes() {
     data_type: 'STRING',
     is_required: false,
     is_unique: false,
-    max_length: null,
     default_value: ''
   })
 
@@ -37,7 +36,7 @@ export default function Attributes() {
         getEntities()
       ])
       setAttributes(attrRes.data || [])
-      setEntities(entRes.data || [])
+      setEntities(entRes.data?.items || [])
     } catch (error) {
       console.error('Error fetching data:', error)
     } finally {
@@ -59,8 +58,13 @@ export default function Attributes() {
     e.preventDefault()
     try {
       const payload = {
-        ...formData,
-        max_length: formData.max_length ? parseInt(formData.max_length) : null
+        entity_id: formData.entity_id,
+        attribute_code: formData.attribute_code,
+        attribute_name: formData.attribute_name,
+        data_type: formData.data_type,
+        is_required: formData.is_required,
+        is_unique: formData.is_unique,
+        default_value: formData.default_value || null
       }
       if (editingAttribute) {
         await updateAttribute(editingAttribute.id, payload)
@@ -95,7 +99,6 @@ export default function Attributes() {
         data_type: attribute.data_type,
         is_required: attribute.is_required,
         is_unique: attribute.is_unique,
-        max_length: attribute.max_length || '',
         default_value: attribute.default_value || ''
       })
     } else {
@@ -107,7 +110,6 @@ export default function Attributes() {
         data_type: 'STRING',
         is_required: false,
         is_unique: false,
-        max_length: '',
         default_value: ''
       })
     }
@@ -250,6 +252,7 @@ export default function Attributes() {
                     onChange={(e) => setFormData({ ...formData, entity_id: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                     required
+                    disabled={editingAttribute}
                   >
                     <option value="">Select Entity</option>
                     {entities.map((entity) => (
@@ -267,6 +270,7 @@ export default function Attributes() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                       placeholder="e.g., first_name"
                       required
+                      disabled={editingAttribute}
                     />
                   </div>
                   <div>
@@ -281,29 +285,18 @@ export default function Attributes() {
                     />
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Data Type</label>
-                    <select
-                      value={formData.data_type}
-                      onChange={(e) => setFormData({ ...formData, data_type: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    >
-                      {DATA_TYPES.map((type) => (
-                        <option key={type} value={type}>{type}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Max Length</label>
-                    <input
-                      type="number"
-                      value={formData.max_length}
-                      onChange={(e) => setFormData({ ...formData, max_length: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                      placeholder="Optional"
-                    />
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Data Type</label>
+                  <select
+                    value={formData.data_type}
+                    onChange={(e) => setFormData({ ...formData, data_type: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    disabled={editingAttribute}
+                  >
+                    {DATA_TYPES.map((type) => (
+                      <option key={type} value={type}>{type}</option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Default Value</label>
