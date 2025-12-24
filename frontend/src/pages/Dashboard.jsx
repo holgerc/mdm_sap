@@ -14,14 +14,14 @@ export default function Dashboard() {
     const fetchStats = async () => {
       try {
         const [entitiesRes, catalogsRes, healthRes] = await Promise.all([
-          getEntities().catch(() => ({ data: [] })),
+          getEntities().catch(() => ({ data: { items: [], total: 0 } })),
           getCatalogs().catch(() => ({ data: [] })),
           getHealth().catch(() => ({ data: { status: 'unhealthy' } }))
         ])
 
         setStats({
-          entities: entitiesRes.data?.length || 0,
-          catalogs: catalogsRes.data?.length || 0,
+          entities: entitiesRes.data?.total || entitiesRes.data?.items?.length || 0,
+          catalogs: Array.isArray(catalogsRes.data) ? catalogsRes.data.length : 0,
           healthy: healthRes.data?.status === 'healthy'
         })
       } catch (error) {
